@@ -11,7 +11,7 @@ import { Button } from "../ui/Button/Button";
 import styles from "./CreateApplicationForm.module.css";
 import { Input } from "./Input";
 import { SelectInput } from "./SelectInput";
-import { useApplications } from "../context/ApplicationsContext";
+import { createDb } from "../../json-server/db";
 export const ERROR_REQUIRED = "Required";
 export const ERROR_MIN_AMOUNT = "Min. Amount >= 1000";
 export const ERROR_MAX_AMOUNT = "Max. Amount <= 150000";
@@ -24,9 +24,8 @@ type TFormValues = {
 };
 
 export const CreateApplicationForm = () => {
-  const { createApplication } = useApplications();
   const methods = useForm<TFormValues>();
-  const onSubmit = (values: TFormValues) => createApplication("SUBMIT", values);
+  const onSubmit = (values: TFormValues) => console.log("SUBMIT", values);
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>

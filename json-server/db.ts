@@ -69,7 +69,7 @@ type TLoanHistory = {
   interest: number;
 };
 
-function fakeLoanHistory(): TLoanHistory[] {
+export function fakeLoanHistory(): TLoanHistory[] {
   let history: TLoanHistory[] = [];
 
   for (let index = 0; index < faker.number.int(10); index++) {
