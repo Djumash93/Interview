@@ -1,12 +1,16 @@
 import "./App.css";
 import Applications from "./Applications";
+import { CreateApplicationForm } from "./CreateApplicationForm/CreateApplicationForm";
 import Header from "./Header";
-
+import { ApplicationProvider } from "./context/ApplicationsContext";
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Applications />
+      <ApplicationProvider>
+        <Header />
+        <Applications />
+        <CreateApplicationForm />
+      </ApplicationProvider>
     </div>
   );
 }

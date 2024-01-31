@@ -9,10 +9,12 @@ import {
 } from "react-hook-form";
 import { Button } from "../ui/Button/Button";
 import styles from "./CreateApplicationForm.module.css";
-
-const ERROR_REQUIRED = "Required";
-const ERROR_MIN_AMOUNT = "Min. Amount >= 1000";
-const ERROR_MAX_AMOUNT = "Max. Amount <= 150000";
+import { Input } from "./Input";
+import { SelectInput } from "./SelectInput";
+import { useApplications } from "../context/ApplicationsContext";
+export const ERROR_REQUIRED = "Required";
+export const ERROR_MIN_AMOUNT = "Min. Amount >= 1000";
+export const ERROR_MAX_AMOUNT = "Max. Amount <= 150000";
 
 type TFormValues = {
   first_name: string;
@@ -22,9 +24,9 @@ type TFormValues = {
 };
 
 export const CreateApplicationForm = () => {
+  const { createApplication } = useApplications();
   const methods = useForm<TFormValues>();
-  const onSubmit = (values: TFormValues) => console.log("SUBMIT", values);
-
+  const onSubmit = (values: TFormValues) => createApplication("SUBMIT", values);
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
@@ -67,71 +69,6 @@ export const CreateApplicationForm = () => {
       </form>
     </FormProvider>
   );
-};
-
-const Input = ({ id, label, type = "text", validation = {} }) => {
-  const { showError, error, register } = useFormField(id);
-
-  return (
-    <span className={styles.inputContainer}>
-      <label htmlFor={id} className={styles.label}>
-        {label}
-      </label>
-      <input
-        className={styles.input}
-        id={id}
-        type={type}
-        {...register(validation)}
-      />
-      {showError ? <span className={styles.error}>{error}</span> : null}
-    </span>
-  );
-};
-
-const SelectInput = ({ id, label, options }) => {
-  const { showError, error, register } = useFormField(id);
-
-  return (
-    <span className={styles.inputContainer}>
-      <label htmlFor={id} className={styles.label}>
-        {label}
-      </label>
-      <select
-        id={id}
-        className={styles.input}
-        {...register({
-          required: { value: true, message: ERROR_REQUIRED },
-        })}
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Please select a type
-        </option>
-        {options.map(([value, label]) => (
-          <option value={value} key={value}>
-            {label}
-          </option>
-        ))}
-      </select>
-      {showError ? <span className={styles.error}>{error}</span> : null}
-    </span>
-  );
-};
-
-const useFormField = (id: string) => {
-  const { formState, register } = useFormContext();
-
-  const hasSubmitted = formState.submitCount > 0;
-  const error = castErrorToString(formState.errors[id]);
-  const showError = Boolean(
-    (hasSubmitted || formState.touchedFields[id]) && error
-  );
-
-  return {
-    showError,
-    error,
-    register: (validation: RegisterOptions) => register(id, validation),
-  };
 };
 
 type THookFormError = UseFormReturn["formState"]["errors"][string];
